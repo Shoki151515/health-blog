@@ -1,6 +1,6 @@
 import PostCard from "@/components/PostCard";
-import { getPosts } from "@/lib/microcms";
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: '健康雑学ブログ - 健康に関する役立つ情報をお届け',
@@ -107,12 +107,12 @@ export default async function Home() {
           </div>
           
           <div className="text-center mt-12">
-            <a
+            <Link
               href="/posts"
               className="inline-block bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
             >
               すべての記事を見る
-            </a>
+            </Link>
           </div>
         </div>
       </section>

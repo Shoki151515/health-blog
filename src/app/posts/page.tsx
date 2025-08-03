@@ -1,5 +1,4 @@
 import PostCard from "@/components/PostCard";
-import { getPosts } from "@/lib/microcms";
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {

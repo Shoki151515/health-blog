@@ -1,5 +1,4 @@
 import { MetadataRoute } from 'next';
-import { getPosts } from '@/lib/microcms';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://health-blog.vercel.app';

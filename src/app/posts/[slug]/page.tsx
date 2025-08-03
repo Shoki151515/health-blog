@@ -1,7 +1,5 @@
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
-import { getPost, getPosts } from '@/lib/microcms';
 import { Metadata } from 'next';
 
 interface PostPageProps {
