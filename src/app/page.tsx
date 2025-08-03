@@ -136,13 +136,13 @@ export default async function Home() {
               { name: "生活習慣", href: "/tags/生活習慣", color: "bg-yellow-100 text-yellow-800" },
               { name: "食事", href: "/tags/食事", color: "bg-red-100 text-red-800" },
             ].map((category) => (
-              <a
+              <Link
                 key={category.name}
                 href={category.href}
                 className={`${category.color} p-6 rounded-lg text-center hover:opacity-80 transition-opacity`}
               >
                 <h3 className="text-lg font-semibold">{category.name}</h3>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
