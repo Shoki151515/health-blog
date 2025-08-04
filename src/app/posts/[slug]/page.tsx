@@ -2,13 +2,7 @@ import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import { Metadata } from 'next';
 
-interface PostPageProps {
-  params: Promise<{
-    slug: string;
-  }>;
-}
-
-export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   // ダミーデータ（開発用）
   const posts = [
@@ -76,7 +70,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   };
 }
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
   // 実際のmicroCMS連携時はコメントアウトを外す
   // const posts = await getPosts();
   
@@ -119,7 +113,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function PostPage({ params }: PostPageProps) {
+export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   // 実際のmicroCMS連携時はコメントアウトを外す
   // const post = await getPost(slug);
