@@ -13,9 +13,16 @@ export default function PostCard({ post }: PostCardProps) {
     day: 'numeric',
   });
 
+  // slugが文字列で存在しない場合はIDを使用し、常に安全な文字列にエンコード
+  const slugOrId = typeof post.slug === 'string' && post.slug.trim().length > 0 ? post.slug : post.id;
+  const linkHref = `/posts/${encodeURIComponent(slugOrId)}`;
+  
+  // タグの表示（tagsまたはcategoryから取得）
+  const displayTags = post.tags || (post.category ? [post.category.name] : []);
+
   return (
     <article className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-      <Link href={`/posts/${post.slug}`} className="block">
+      <Link href={linkHref} className="block">
         {post.eyecatchImage && (
           <div className="relative h-48 w-full">
             <Image
@@ -29,7 +36,7 @@ export default function PostCard({ post }: PostCardProps) {
         )}
         <div className="p-6">
           <div className="flex items-center gap-2 mb-3">
-            {post.tags.map((tag) => (
+            {displayTags.map((tag) => (
               <span
                 key={tag}
                 className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full"

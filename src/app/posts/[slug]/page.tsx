@@ -1,44 +1,55 @@
 import { notFound } from 'next/navigation';
-import ReactMarkdown from 'react-markdown';
+import DOMPurify from 'isomorphic-dompurify';
+import { getPost, getPosts, Post } from '@/lib/microcms';
 import { Metadata } from 'next';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  // ダミーデータ（開発用）
-  const posts = [
-    {
-      id: "1",
-      title: "ビタミンDの驚くべき効果と摂取方法",
-      slug: "vitamin-d-benefits",
-      body: "ビタミンDは骨の健康だけでなく、免疫力向上や気分改善にも効果があることが知られています。この記事では、ビタミンDの効果と効率的な摂取方法について詳しく解説します。",
-      publishedAt: "2024-01-15T00:00:00.000Z",
-      tags: ["サプリメント", "ビタミン"],
-      createdAt: "2024-01-15T00:00:00.000Z",
-      updatedAt: "2024-01-15T00:00:00.000Z",
-    },
-    {
-      id: "2",
-      title: "朝食を抜くと太る？朝食の重要性について",
-      slug: "breakfast-importance",
-      body: "朝食を抜くことで代謝が下がり、太りやすくなるという説があります。しかし、最近の研究では朝食の重要性について様々な意見があります。この記事では、朝食の効果と最適な朝食の取り方について解説します。",
-      publishedAt: "2024-01-10T00:00:00.000Z",
-      tags: ["食事", "生活習慣"],
-      createdAt: "2024-01-10T00:00:00.000Z",
-      updatedAt: "2024-01-10T00:00:00.000Z",
-    },
-    {
-      id: "3",
-      title: "睡眠の質を向上させる5つの方法",
-      slug: "improve-sleep-quality",
-      body: "良質な睡眠は健康の基本です。この記事では、睡眠の質を向上させるための5つの具体的な方法をご紹介します。今日から実践できる簡単な方法ばかりです。",
-      publishedAt: "2024-01-05T00:00:00.000Z",
-      tags: ["生活習慣", "睡眠"],
-      createdAt: "2024-01-05T00:00:00.000Z",
-      updatedAt: "2024-01-05T00:00:00.000Z",
-    },
-  ];
-
-  const post = posts.find(p => p.slug === slug);
+  
+  let post;
+  try {
+    // Micro CMSから記事を取得
+    post = await getPost(slug);
+  } catch (error) {
+    console.error('記事の取得に失敗しました:', error);
+        // Micro CMSが利用できない場合はダミーデータを使用
+    const posts: Post[] = [
+      {
+        id: "1",
+        title: "ビタミンDの驚くべき効果と摂取方法",
+        slug: "vitamin-d-benefits",
+        body: "ビタミンDは骨の健康だけでなく、免疫力向上や気分改善にも効果があることが知られています。この記事では、ビタミンDの効果と効率的な摂取方法について詳しく解説します。",
+        publishedAt: "2024-01-15T00:00:00.000Z",
+        tags: ["サプリメント", "ビタミン"],
+        createdAt: "2024-01-15T00:00:00.000Z",
+        updatedAt: "2024-01-15T00:00:00.000Z",
+        revisedAt: "2024-01-15T00:00:00.000Z",
+      },
+          {
+        id: "2",
+        title: "朝食を抜くと太る？朝食の重要性について",
+        slug: "breakfast-importance",
+        body: "朝食を抜くことで代謝が下がり、太りやすくなるという説があります。しかし、最近の研究では朝食の重要性について様々な意見があります。この記事では、朝食の効果と最適な朝食の取り方について解説します。",
+        publishedAt: "2024-01-10T00:00:00.000Z",
+        tags: ["食事", "生活習慣"],
+        createdAt: "2024-01-10T00:00:00.000Z",
+        updatedAt: "2024-01-10T00:00:00.000Z",
+        revisedAt: "2024-01-10T00:00:00.000Z",
+      },
+      {
+        id: "3",
+        title: "睡眠の質を向上させる5つの方法",
+        slug: "improve-sleep-quality",
+        body: "良質な睡眠は健康の基本です。この記事では、睡眠の質を向上させるための5つの具体的な方法をご紹介します。今日から実践できる簡単な方法ばかりです。",
+        publishedAt: "2024-01-05T00:00:00.000Z",
+        tags: ["生活習慣", "睡眠"],
+        createdAt: "2024-01-05T00:00:00.000Z",
+        updatedAt: "2024-01-05T00:00:00.000Z",
+        revisedAt: "2024-01-05T00:00:00.000Z",
+      },
+      ];
+    post = posts.find(p => p.slug === slug) || null;
+  }
   
   if (!post) {
     return {
@@ -49,6 +60,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const siteName = process.env.NEXT_PUBLIC_SITE_NAME || '健康雑学ブログ';
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://health-blog.vercel.app';
 
+  const safeSlug = typeof post.slug === 'string' && post.slug.trim().length > 0 ? post.slug : post.id;
+  const postUrl = `${baseUrl}/posts/${encodeURIComponent(safeSlug)}`;
+
   return {
     title: `${post.title} | ${siteName}`,
     description: post.body.replace(/<[^>]*>/g, '').substring(0, 120) + '...',
@@ -56,7 +70,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: `${post.title} | ${siteName}`,
       description: post.body.replace(/<[^>]*>/g, '').substring(0, 120) + '...',
       type: 'article',
-      url: `${baseUrl}/posts/${post.slug}`,
+      url: postUrl,
       siteName: siteName,
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt,
@@ -70,56 +84,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  // 実際のmicroCMS連携時はコメントアウトを外す
-  // const posts = await getPosts();
-  
-  // ダミーデータ（開発用）
-  const posts = [
-    {
-      id: "1",
-      title: "ビタミンDの驚くべき効果と摂取方法",
-      slug: "vitamin-d-benefits",
-      body: "ビタミンDは骨の健康だけでなく、免疫力向上や気分改善にも効果があることが知られています。この記事では、ビタミンDの効果と効率的な摂取方法について詳しく解説します。",
-      publishedAt: "2024-01-15T00:00:00.000Z",
-      tags: ["サプリメント", "ビタミン"],
-      createdAt: "2024-01-15T00:00:00.000Z",
-      updatedAt: "2024-01-15T00:00:00.000Z",
-    },
-    {
-      id: "2",
-      title: "朝食を抜くと太る？朝食の重要性について",
-      slug: "breakfast-importance",
-      body: "朝食を抜くことで代謝が下がり、太りやすくなるという説があります。しかし、最近の研究では朝食の重要性について様々な意見があります。この記事では、朝食の効果と最適な朝食の取り方について解説します。",
-      publishedAt: "2024-01-10T00:00:00.000Z",
-      tags: ["食事", "生活習慣"],
-      createdAt: "2024-01-10T00:00:00.000Z",
-      updatedAt: "2024-01-10T00:00:00.000Z",
-    },
-    {
-      id: "3",
-      title: "睡眠の質を向上させる5つの方法",
-      slug: "improve-sleep-quality",
-      body: "良質な睡眠は健康の基本です。この記事では、睡眠の質を向上させるための5つの具体的な方法をご紹介します。今日から実践できる簡単な方法ばかりです。",
-      publishedAt: "2024-01-05T00:00:00.000Z",
-      tags: ["生活習慣", "睡眠"],
-      createdAt: "2024-01-05T00:00:00.000Z",
-      updatedAt: "2024-01-05T00:00:00.000Z",
-    },
-  ];
-
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+export async function generateStaticParams() {
+  // 空の配列を返すことで動的ルーティングを有効にする
+  // 各ページは実行時に生成される
+  return [];
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  // 実際のmicroCMS連携時はコメントアウトを外す
-  // const post = await getPost(slug);
   
-  // ダミーデータ（開発用）
-  const posts = [
+  let post;
+  try {
+    // Micro CMSから記事を取得
+    post = await getPost(slug);
+  } catch (error) {
+    console.error('記事の取得に失敗しました:', error);
+    // Micro CMSが利用できない場合はダミーデータを使用
+    const posts: Post[] = [
     {
       id: "1",
       title: "ビタミンDの驚くべき効果と摂取方法",
@@ -166,6 +147,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       tags: ["サプリメント", "ビタミン"],
       createdAt: "2024-01-15T00:00:00.000Z",
       updatedAt: "2024-01-15T00:00:00.000Z",
+      revisedAt: "2024-01-15T00:00:00.000Z",
     },
     {
       id: "2",
@@ -208,6 +190,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       tags: ["食事", "生活習慣"],
       createdAt: "2024-01-10T00:00:00.000Z",
       updatedAt: "2024-01-10T00:00:00.000Z",
+      revisedAt: "2024-01-10T00:00:00.000Z",
     },
     {
       id: "3",
@@ -255,10 +238,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       tags: ["生活習慣", "睡眠"],
       createdAt: "2024-01-05T00:00:00.000Z",
       updatedAt: "2024-01-05T00:00:00.000Z",
+      revisedAt: "2024-01-05T00:00:00.000Z",
     },
-  ];
-
-  const post = posts.find(p => p.slug === slug);
+      ];
+    
+    post = posts.find(p => p.slug === slug) || null;
+  }
 
   if (!post) {
     notFound();
@@ -276,7 +261,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         {/* 記事ヘッダー */}
         <header className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            {post.tags.map((tag) => (
+            {(post.tags || (post.category ? [post.category.name] : [])).map((tag) => (
               <span
                 key={tag}
                 className="inline-block bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full"
@@ -293,10 +278,17 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </div>
         </header>
 
-        {/* 記事本文 */}
-        <div className="prose prose-lg max-w-none">
-          <ReactMarkdown>{post.body}</ReactMarkdown>
-        </div>
+        {/* 記事本文（microCMSのHTMLをサニタイズして描画） */}
+        <div
+          className="article-body"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(post.body || '', {
+              // 見出しや段落のサイズ指定など、インラインstyleを安全に許可
+              ADD_ATTR: ['style'],
+              ALLOWED_ATTR: ['style', 'class', 'id']
+            }),
+          }}
+        />
 
         {/* アフィリエイトセクション */}
         <section className="mt-12 p-6 bg-gray-50 rounded-lg">
@@ -342,7 +334,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           <h3 className="text-lg font-semibold mb-4">この記事をシェア</h3>
           <div className="flex space-x-4">
             <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL}/posts/${post.slug}`)}`}
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL}/posts/${typeof post.slug === 'string' && post.slug.trim().length > 0 ? post.slug : post.id}`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
@@ -350,7 +342,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               Twitterでシェア
             </a>
             <a
-              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL}/posts/${post.slug}`)}`}
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL}/posts/${typeof post.slug === 'string' && post.slug.trim().length > 0 ? post.slug : post.id}`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"

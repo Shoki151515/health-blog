@@ -1,4 +1,5 @@
 import PostCard from "@/components/PostCard";
+import { getPosts } from "@/lib/microcms";
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -17,11 +18,15 @@ export const metadata: Metadata = {
 };
 
 export default async function PostsPage() {
-  // 実際のmicroCMS連携時はコメントアウトを外す
-  // const posts = await getPosts();
+  let posts;
   
-  // ダミーデータ（開発用）
-  const posts = [
+  try {
+    // Micro CMSから記事を取得
+    posts = await getPosts();
+  } catch (error) {
+    console.error('記事の取得に失敗しました:', error);
+    // Micro CMSが利用できない場合はダミーデータを使用
+    posts = [
     {
       id: "1",
       title: "ビタミンDの驚くべき効果と摂取方法",
@@ -82,7 +87,8 @@ export default async function PostsPage() {
       createdAt: "2023-12-25T00:00:00.000Z",
       updatedAt: "2023-12-25T00:00:00.000Z",
     },
-  ];
+    ];
+  }
 
   return (
     <>

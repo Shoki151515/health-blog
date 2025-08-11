@@ -4,12 +4,14 @@ Instagramと連携した健康雑学ブログです。健康に関する雑学�
 
 ## 🚀 技術スタック
 
-- **フレームワーク**: Next.js 14 (App Router)
-- **スタイリング**: Tailwind CSS
+- **フレームワーク**: Next.js 15 (App Router)
+- **スタイリング**: Tailwind CSS 4
 - **CMS**: microCMS
-- **ホスティング**: Vercel
-- **SEO**: next-seo
+- **ホスティング**: Vercel（最適化済み）
+- **画像最適化**: Vercel Image Optimization
+- **OG画像生成**: @vercel/og
 - **アナリティクス**: Google Analytics 4
+- **パフォーマンス**: Vercel Edge Network
 
 ## 📦 主な機能
 
@@ -72,19 +74,54 @@ npm run dev
 
 ### Vercelでのデプロイ
 
-1. GitHubリポジトリをVercelに接続
-2. 環境変数を設定
-3. 自動デプロイが有効になります
+このプロジェクトはVercelでの最適化が完了しており、簡単にデプロイできます。
 
-### 環境変数の設定
+#### 自動デプロイ手順
 
-Vercelのダッシュボードで以下の環境変数を設定してください：
+1. **GitHubリポジトリをVercelに接続**
+   - [Vercel Dashboard](https://vercel.com/dashboard)にアクセス
+   - "New Project"をクリック
+   - GitHubリポジトリを選択
 
-- `MICROCMS_SERVICE_DOMAIN`
-- `MICROCMS_API_KEY`
-- `NEXT_PUBLIC_GA_ID`
-- `NEXT_PUBLIC_SITE_URL`
-- `NEXT_PUBLIC_SITE_NAME`
+2. **プロジェクト設定**
+   - Framework Preset: Next.js（自動検出）
+   - Root Directory: `health-blog`（自動設定済み）
+   - Build Command: `npm run build`（自動設定済み）
+
+3. **環境変数の設定**
+   - Settings → Environment Variables で以下を設定：
+
+#### 必須環境変数
+
+```env
+# microCMS設定（必須）
+MICROCMS_SERVICE_DOMAIN=your-service-domain
+MICROCMS_API_KEY=your-api-key
+
+# サイト設定（必須）
+NEXT_PUBLIC_SITE_URL=https://your-domain.vercel.app
+NEXT_PUBLIC_SITE_NAME=健康雑学ブログ
+
+# Google Analytics（オプション）
+NEXT_PUBLIC_GA_ID=your-ga-id
+```
+
+#### Vercelの最適化機能
+
+✅ **自動有効化済み**
+- Edge Network（グローバルCDN）
+- Image Optimization（自動画像最適化）
+- Static Generation（静的生成）
+- OG Image Generation（@vercel/og使用）
+- Security Headers（セキュリティヘッダー）
+
+#### デプロイ確認
+
+デプロイ後、以下を確認してください：
+- ✅ サイトが正常に表示される
+- ✅ microCMSからデータが取得できる
+- ✅ 画像が最適化されて表示される
+- ✅ OGイメージが生成される
 
 ## 📊 収益化
 
