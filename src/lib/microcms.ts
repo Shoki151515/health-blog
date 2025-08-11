@@ -1,9 +1,17 @@
 import { createClient } from 'microcms-js-sdk';
 
-export const client = createClient({
-  serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN || '',
-  apiKey: process.env.MICROCMS_API_KEY || '',
-});
+// Vercelビルド時に環境変数未設定でも落ちないよう遅延初期化
+let cachedClient: ReturnType<typeof createClient> | null = null;
+function getClientSafe() {
+  if (cachedClient) return cachedClient;
+  const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN;
+  const apiKey = process.env.MICROCMS_API_KEY;
+  if (!serviceDomain || !apiKey) {
+    return null;
+  }
+  cachedClient = createClient({ serviceDomain, apiKey });
+  return cachedClient;
+}
 
 // カテゴリの型定義
 export interface Category {
@@ -36,6 +44,8 @@ export interface Post {
 
 // 記事一覧を取得
 export const getPosts = async (): Promise<Post[]> => {
+  const client = getClientSafe();
+  if (!client) return [];
   const data = await client.getList<Post>({
     endpoint: 'blogs',
     queries: { orders: '-publishedAt' },
@@ -45,13 +55,14 @@ export const getPosts = async (): Promise<Post[]> => {
 
 // 記事詳細を取得（slug または ID で検索）
 export const getPost = async (slug: string): Promise<Post | null> => {
+  const client = getClientSafe();
+  if (!client) return null;
   try {
     // まずslugで検索を試す
     let data = await client.getList<Post>({
       endpoint: 'blogs',
       queries: { filters: `slug[equals]${slug}` },
     });
-    
     // slugで見つからない場合はIDで検索
     if (data.contents.length === 0) {
       data = await client.getList<Post>({
@@ -59,7 +70,6 @@ export const getPost = async (slug: string): Promise<Post | null> => {
         queries: { filters: `id[equals]${slug}` },
       });
     }
-    
     return data.contents[0] || null;
   } catch (error) {
     console.error('Error fetching post:', error);
@@ -69,6 +79,8 @@ export const getPost = async (slug: string): Promise<Post | null> => {
 
 // タグ別記事一覧を取得
 export const getPostsByTag = async (tag: string): Promise<Post[]> => {
+  const client = getClientSafe();
+  if (!client) return [];
   const data = await client.getList<Post>({
     endpoint: 'blogs',
     queries: { 
@@ -77,4 +89,4 @@ export const getPostsByTag = async (tag: string): Promise<Post[]> => {
     },
   });
   return data.contents;
-}; 
+};
