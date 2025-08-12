@@ -20,7 +20,7 @@ export default function PostCard({ post }: PostCardProps) {
   // 表示用タグ（tags または categories/単数category から合成）
   const categoryNames = Array.isArray(post.categories)
     ? post.categories.map((c) => c.name)
-    : (post.category ? [post.category.name] : []);
+    : (Array.isArray(post.category) ? post.category.map(c => c.name) : (post.category ? [post.category.name] : []));
   const displayTags = (post.tags || []).concat(categoryNames);
 
   return (

@@ -263,10 +263,17 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         {/* 記事ヘッダー */}
         <header className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            {(
-              (post.tags || [])
-                .concat(Array.isArray(post.categories) ? post.categories.map(c => c.name) : (post.category ? [post.category.name] : []))
-            ).map((tag) => (
+            {(() => {
+              const namesFromCategories = Array.isArray(post.categories)
+                ? post.categories.map((c) => c.name)
+                : [];
+              const namesFromCategory = Array.isArray(post.category)
+                ? post.category.map((c) => c.name)
+                : (post.category ? [post.category.name] : []);
+              const tags = post.tags || [];
+              const display = [...namesFromCategories, ...namesFromCategory, ...tags];
+              return display;
+            })().map((tag) => (
               <span
                 key={tag}
                 className="inline-block bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full"
