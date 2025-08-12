@@ -30,6 +30,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}
       >
+        {/* Preconnect for microCMS images */}
+        <link rel="preconnect" href="https://images.microcms-assets.io" crossOrigin="anonymous" />
         <GoogleAnalytics />
         <div className="min-h-screen flex flex-col">
           <Header />

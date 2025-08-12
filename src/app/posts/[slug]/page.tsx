@@ -3,6 +3,8 @@ import DOMPurify from 'isomorphic-dompurify';
 import { getPost, getPosts, Post } from '@/lib/microcms';
 import { Metadata } from 'next';
 
+export const revalidate = 60; // ISR
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   

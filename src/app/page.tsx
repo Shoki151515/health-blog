@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 60; // ISR: 60秒ごとに再生成
+
 export default async function Home() {
   let posts = [] as Awaited<ReturnType<typeof getPosts>>;
   try {
