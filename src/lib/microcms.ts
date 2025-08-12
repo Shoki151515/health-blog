@@ -35,7 +35,10 @@ export interface Post {
     width: number;
   };
   publishedAt: string;
-  category?: Category; // tagsの代わりにcategoryを使用
+  // カテゴリを複数参照に対応
+  categories?: Category[];
+  // 後方互換のため単数も許容（既存データ移行中でも動作）
+  category?: Category;
   tags?: string[]; // 後方互換性のため残す
   createdAt: string;
   updatedAt: string;

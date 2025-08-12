@@ -17,8 +17,11 @@ export default function PostCard({ post }: PostCardProps) {
   const slugOrId = typeof post.slug === 'string' && post.slug.trim().length > 0 ? post.slug : post.id;
   const linkHref = `/posts/${encodeURIComponent(slugOrId)}`;
   
-  // タグの表示（tagsまたはcategoryから取得）
-  const displayTags = post.tags || (post.category ? [post.category.name] : []);
+  // 表示用タグ（tags または categories/単数category から合成）
+  const categoryNames = Array.isArray(post.categories)
+    ? post.categories.map((c) => c.name)
+    : (post.category ? [post.category.name] : []);
+  const displayTags = (post.tags || []).concat(categoryNames);
 
   return (
     <article className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
