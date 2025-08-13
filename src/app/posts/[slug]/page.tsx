@@ -259,7 +259,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   return (
     <>
-      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white">
         {/* 記事ヘッダー */}
         <header className="mb-8">
           <div className="flex items-center gap-2 mb-4">
@@ -292,7 +292,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
         {/* 記事本文（microCMSのHTMLをサニタイズして描画） */}
         <div
-          className="article-body"
+          className="article-body text-gray-900"
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(post.body || '', {
               // 見出しや段落のサイズ指定など、インラインstyleを安全に許可

@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "健康雑学ブログ - 健康に関する役立つ情報をお届け",
-  description: "健康に関する雑学やサプリメントのレビュー、生活習慣の改善方法など、あなたの健康生活をサポートする情報をお届けします。",
+  description: "最新の科学で解明された健康にまつわる知識を発信。幸せの第一歩は自分の体から。",
 };
 
 export default function RootLayout({
@@ -35,7 +35,7 @@ export default function RootLayout({
         <GoogleAnalytics />
         <div className="min-h-screen flex flex-col">
           <Header />
-          <main className="flex-1">
+          <main className="flex-1 bg-white">
             {children}
           </main>
           <Footer />

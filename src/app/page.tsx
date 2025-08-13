@@ -5,16 +5,16 @@ import { getPosts } from "@/lib/microcms";
 
 export const metadata: Metadata = {
   title: '健康雑学ブログ - 健康に関する役立つ情報をお届け',
-  description: '健康に関する雑学やサプリメントのレビュー、生活習慣の改善方法など、あなたの健康生活をサポートする情報をお届けします。',
+  description: '最新の科学で解明された健康にまつわる知識を発信。幸せの第一歩は自分の体から。',
   openGraph: {
     title: '健康雑学ブログ - 健康に関する役立つ情報をお届け',
-    description: '健康に関する雑学やサプリメントのレビュー、生活習慣の改善方法など、あなたの健康生活をサポートする情報をお届けします。',
+    description: '最新の科学で解明された健康にまつわる知識を発信。幸せの第一歩は自分の体から。',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: '健康雑学ブログ - 健康に関する役立つ情報をお届け',
-    description: '健康に関する雑学やサプリメントのレビュー、生活習慣の改善方法など、あなたの健康生活をサポートする情報をお届けします。',
+    description: '最新の科学で解明された健康にまつわる知識を発信。幸せの第一歩は自分の体から。',
   },
 };
 
@@ -39,12 +39,11 @@ export default async function Home() {
               健康雑学ブログ
             </h1>
             <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-              健康に関する雑学やサプリメントのレビュー、生活習慣の改善方法など、
-              あなたの健康生活をサポートする情報をお届けします。
+              最新の科学で解明された健康にまつわる知識を発信。幸せの第一歩は自分の体から。
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="https://instagram.com/your-health-account"
+                href="https://www.instagram.com/sho_kenko_zatugaku/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
@@ -63,7 +62,7 @@ export default async function Home() {
       </section>
 
       {/* 最新記事セクション */}
-      <section id="latest-posts" className="py-16">
+      <section id="latest-posts" className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -107,12 +106,12 @@ export default async function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { name: "サプリメント", href: "/tags/サプリメント", color: "bg-blue-100 text-blue-800" },
-              { name: "健康雑学", href: "/tags/健康雑学", color: "bg-green-100 text-green-800" },
-              { name: "生活習慣", href: "/tags/生活習慣", color: "bg-yellow-100 text-yellow-800" },
-              { name: "食事", href: "/tags/食事", color: "bg-red-100 text-red-800" },
-            ].map((category) => (
+              {[
+                { name: "サプリメント", href: "/categories/サプリメント", color: "bg-blue-100 text-blue-800" },
+                { name: "健康雑学", href: "/categories/健康雑学", color: "bg-green-100 text-green-800" },
+                { name: "生活習慣", href: "/categories/生活習慣", color: "bg-yellow-100 text-yellow-800" },
+                { name: "食事", href: "/categories/食事", color: "bg-red-100 text-red-800" },
+              ].map((category) => (
               <Link
                 key={category.name}
                 href={category.href}

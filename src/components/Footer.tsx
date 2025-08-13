@@ -13,12 +13,12 @@ export default function Footer() {
               <span className="text-xl font-bold">健康雑学ブログ</span>
             </div>
             <p className="text-gray-300 mb-4">
-              健康に関する雑学やサプリメントのレビュー、生活習慣の改善方法など、
-              あなたの健康生活をサポートする情報をお届けします。
+              健康に関する雑学を発信しています。の生活をより
+              健康あっての幸せ。そういう思いで発信しています。
             </p>
             <div className="flex space-x-4">
               <a
-                href="https://instagram.com/your-health-account"
+                href="https://www.instagram.com/sho_kenko_zatugaku/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-green-400 transition-colors"
@@ -34,22 +34,22 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">カテゴリー</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/tags/サプリメント" className="text-gray-300 hover:text-green-400 transition-colors">
+                <Link href="/categories/サプリメント" className="text-gray-300 hover:text-green-400 transition-colors">
                   サプリメント
                 </Link>
               </li>
               <li>
-                <Link href="/tags/健康雑学" className="text-gray-300 hover:text-green-400 transition-colors">
+                <Link href="/categories/健康雑学" className="text-gray-300 hover:text-green-400 transition-colors">
                   健康雑学
                 </Link>
               </li>
               <li>
-                <Link href="/tags/生活習慣" className="text-gray-300 hover:text-green-400 transition-colors">
+                <Link href="/categories/生活習慣" className="text-gray-300 hover:text-green-400 transition-colors">
                   生活習慣
                 </Link>
               </li>
               <li>
-                <Link href="/tags/食事" className="text-gray-300 hover:text-green-400 transition-colors">
+                <Link href="/categories/食事" className="text-gray-300 hover:text-green-400 transition-colors">
                   食事
                 </Link>
               </li>

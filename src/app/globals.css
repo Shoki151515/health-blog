@@ -37,3 +37,5 @@ body {
 .article-body ol { list-style: decimal inside; margin: 1em 0; }
 .article-body img { max-width: 100%; height: auto; }
 .article-body a { color: #059669; text-decoration: underline; }
+/* 本文の背景色を明るい色にし、可読性のため文字色も濃色に */
+/* .article-body { background-color: #f9fafb; color: #111827; padding: 1rem; border-radius: 0.5rem; } */
